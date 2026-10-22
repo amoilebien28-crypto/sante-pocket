@@ -293,16 +293,6 @@
             cursor: pointer;
         }
 
-        .doctor-banner {
-            background: #fef08a;
-            color: #854d0e;
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: none;
-            text-align: center;
-        }
-
         .lightbox {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -327,26 +317,66 @@
             color: var(--text-sub);
         }
 
-        /* نافذة الإدخال البديلة لـ prompt */
-        .custom-dialog-overlay {
+        /* نافذة رسائل مخصصة بديلة لرسائل المتصفح الافتراضية */
+        .app-modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(15, 23, 42, 0.7);
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 250;
+            z-index: 500;
             padding: 20px;
         }
 
-        .custom-dialog-box {
+        .app-modal-box {
             background: white;
             border-radius: 16px;
-            padding: 20px;
+            padding: 22px 18px;
             width: 100%;
             max-width: 320px;
             text-align: center;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .app-modal-box h3 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .app-modal-box p {
+            font-size: 0.9rem;
+            color: var(--text-main);
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .app-modal-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .app-modal-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+        }
+
+        .app-modal-btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .app-modal-btn-secondary {
+            background: #e2e8f0;
+            color: var(--text-main);
         }
     </style>
 </head>
@@ -391,11 +421,6 @@
         </div>
     </div>
 
-    <div class="doctor-banner" id="doctorBanner">
-        أنت الآن تتصفح ملف المريض: <span id="docPatientPhone"></span>
-        <button onclick="exitDoctorMode()" style="margin-right:10px; padding:2px 8px; border-radius:4px; border:none; cursor:pointer;">العودة لملفي</button>
-    </div>
-
     <header>
         <div class="header-top">
             <h1>محفظتي الصحية</h1>
@@ -433,15 +458,13 @@
         </button>
     </div>
 
-    <!-- نافذة بديلة لرسالة prompt الخاصة بالمتصفح -->
-    <div class="custom-dialog-overlay" id="doctorSearchModal">
-        <div class="custom-dialog-box">
-            <h3 style="color:var(--primary); margin-bottom:10px; font-size:1.1rem;">ملف المريض</h3>
-            <p style="font-size:0.85rem; color:var(--text-sub); margin-bottom:12px;">أدخل رقم هاتف المريض لعرض وصفاته وأدويته:</p>
-            <input type="tel" id="doctorSearchInput" placeholder="رقم الهاتف" style="width:100%; padding:10px; border:1.5px solid var(--border); border-radius:8px; text-align:center; font-weight:700; margin-bottom:15px; outline:none;">
-            <div style="display:flex; gap:8px;">
-                <button onclick="confirmDoctorSearch()" style="flex:1; background:var(--primary); color:white; border:none; padding:9px; border-radius:8px; font-weight:700; cursor:pointer;">عرض</button>
-                <button onclick="closeDoctorSearchModal()" style="flex:1; background:#e2e8f0; color:#334155; border:none; padding:9px; border-radius:8px; font-weight:700; cursor:pointer;">إلغاء</button>
+    <!-- نافذة منبثقة داخلية للرسائل والتنبيهات بديلة للمتصفح -->
+    <div class="app-modal-overlay" id="appModal">
+        <div class="app-modal-box">
+            <h3 id="appModalTitle">إشعار</h3>
+            <p id="appModalMessage"></p>
+            <div class="app-modal-actions" id="appModalActions">
+                <button class="app-modal-btn app-modal-btn-primary" onclick="closeAppModal()">حسناً</button>
             </div>
         </div>
     </div>
@@ -467,6 +490,34 @@
         let currentCategory = 'prescriptions';
         let currentPhone = localStorage.getItem('user_phone') || '';
         let activeViewingPhone = currentPhone;
+
+        // دوال النوافذ المخصصة لمنع ظهور رسائل المتصفح
+        function showAppAlert(title, message) {
+            document.getElementById('appModalTitle').textContent = title;
+            document.getElementById('appModalMessage').textContent = message;
+            document.getElementById('appModalActions').innerHTML = `
+                <button class="app-modal-btn app-modal-btn-primary" onclick="closeAppModal()">حسناً</button>
+            `;
+            document.getElementById('appModal').style.display = 'flex';
+        }
+
+        function showAppConfirm(title, message, onConfirm) {
+            document.getElementById('appModalTitle').textContent = title;
+            document.getElementById('appModalMessage').textContent = message;
+            document.getElementById('appModalActions').innerHTML = `
+                <button class="app-modal-btn app-modal-btn-primary" id="modalConfirmBtn">تأكيد</button>
+                <button class="app-modal-btn app-modal-btn-secondary" onclick="closeAppModal()">إلغاء</button>
+            `;
+            document.getElementById('modalConfirmBtn').onclick = () => {
+                closeAppModal();
+                onConfirm();
+            };
+            document.getElementById('appModal').style.display = 'flex';
+        }
+
+        function closeAppModal() {
+            document.getElementById('appModal').style.display = 'none';
+        }
 
         function initApp() {
             const req = indexedDB.open('HealthWalletDB', 5);
@@ -505,19 +556,19 @@
             const pass = document.getElementById('loginPass').value.trim();
 
             if (!phone || !pass) {
-                alert('الرجاء كتابة رقم الهاتف ورمز السر');
+                showAppAlert('تنبيه', 'الرجاء كتابة رقم الهاتف ورمز السر');
                 return;
             }
 
             try {
                 const userDoc = await cloudDb.collection('app_users').doc(phone).get();
                 if (!userDoc.exists) {
-                    alert('هذا الرقم غير مسجل. يرجى الضغط على "إنشاء حساب جديد" أولاً.');
+                    showAppAlert('تنبيه', 'هذا الرقم غير مسجل. يرجى الضغط على "إنشاء حساب جديد" أولاً.');
                     return;
                 }
 
                 if (userDoc.data().password !== pass) {
-                    alert('رمز السر غير صحيح');
+                    showAppAlert('خطأ', 'رمز السر غير صحيح');
                     return;
                 }
 
@@ -533,19 +584,19 @@
             const passConf = document.getElementById('regPassConfirm').value.trim();
 
             if (!phone || !pass) {
-                alert('الرجاء إدخال رقم الهاتف ورمز السر');
+                showAppAlert('تنبيه', 'الرجاء إدخال رقم الهاتف ورمز السر');
                 return;
             }
 
             if (pass !== passConf) {
-                alert('رمز السر غير متطابق مع خانة التأكيد');
+                showAppAlert('تنبيه', 'رمز السر غير متطابق مع خانة التأكيد');
                 return;
             }
 
             try {
                 const userDoc = await cloudDb.collection('app_users').doc(phone).get();
                 if (userDoc.exists) {
-                    alert('هذا الرقم مسجل مسبقاً! قم بتسجيل الدخول مباشرة.');
+                    showAppAlert('تنبيه', 'هذا الرقم مسجل مسبقاً! قم بتسجيل الدخول مباشرة.');
                     switchAuthMode('login');
                     document.getElementById('loginPhone').value = phone;
                     return;
@@ -557,10 +608,10 @@
                     createdAt: Date.now()
                 });
 
-                alert('تم إنشاء الحساب بنجاح!');
+                showAppAlert('تم بنجاح', 'تم إنشاء الحساب بنجاح!');
                 completeLogin(phone);
             } catch (e) {
-                alert('تعذر إنشاء الحساب، تأكد من اتصال الإنترنت.');
+                showAppAlert('خطأ', 'تعذر إنشاء الحساب، تأكد من اتصال الإنترنت.');
             }
         }
 
@@ -574,38 +625,10 @@
         }
 
         function logout() {
-            if (confirm('هل تريد تسجيل الخروج؟')) {
+            showAppConfirm('تسجيل الخروج', 'هل تريد تسجيل الخروج؟', () => {
                 localStorage.removeItem('user_phone');
                 location.reload();
-            }
-        }
-
-        function promptDoctorSearch() {
-            document.getElementById('doctorSearchInput').value = '';
-            document.getElementById('doctorSearchModal').style.display = 'flex';
-        }
-
-        function closeDoctorSearchModal() {
-            document.getElementById('doctorSearchModal').style.display = 'none';
-        }
-
-        function confirmDoctorSearch() {
-            const targetPhone = document.getElementById('doctorSearchInput').value.trim();
-            if (!targetPhone) return;
-
-            closeDoctorSearchModal();
-            activeViewingPhone = targetPhone;
-            document.getElementById('doctorBanner').style.display = 'block';
-            document.getElementById('docPatientPhone').textContent = activeViewingPhone;
-            document.getElementById('bottomBar').style.display = 'none';
-            loadCategoryData();
-        }
-
-        function exitDoctorMode() {
-            activeViewingPhone = currentPhone;
-            document.getElementById('doctorBanner').style.display = 'none';
-            document.getElementById('bottomBar').style.display = 'flex';
-            loadCategoryData();
+            });
         }
 
         function switchCategory(cat) {
@@ -707,11 +730,11 @@
         }
 
         function deleteDoc(id) {
-            if (confirm('حذف هذه الصورة؟')) {
+            showAppConfirm('تأكيد الحذف', 'هل أنت متأكد من حذف هذه الصورة؟', () => {
                 const tx = localDb.transaction(['documents'], 'readwrite');
                 tx.objectStore('documents').delete(id);
                 tx.oncomplete = () => loadCategoryData();
-            }
+            });
         }
 
         function showLightbox(src) {
@@ -719,6 +742,7 @@
             document.getElementById('lightbox').style.display = 'flex';
         }
 
+        // دالة مزامنة السحابة مع حماية تامة من تكرار الصور
         async function syncCloudToLocal() {
             if (!navigator.onLine || !activeViewingPhone) return;
 
@@ -730,7 +754,20 @@
                 if (!snap.empty) {
                     const tx = localDb.transaction(['documents'], 'readwrite');
                     const store = tx.objectStore('documents');
-                    snap.forEach(doc => store.add(doc.data()));
+                    const req = store.getAll();
+
+                    req.onsuccess = () => {
+                        const existingItems = req.result;
+                        const existingTimestamps = new Set(existingItems.map(item => item.timestamp));
+
+                        snap.forEach(doc => {
+                            const cloudData = doc.data();
+                            if (!existingTimestamps.has(cloudData.timestamp)) {
+                                store.add(cloudData);
+                            }
+                        });
+                    };
+
                     tx.oncomplete = () => loadCategoryData();
                 }
             } catch (e) {}

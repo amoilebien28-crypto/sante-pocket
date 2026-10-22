@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.amoilebien28_crypto.twa",
+        "sha256_cert_fingerprints": ["3C:36:63:4A:6C:72:EC:D7:81:4C:62:06:49:F7:0D:A7:0F:64:12:38:28:44:BB:3E:53:3F:CE:03:B9:8C:EE:64"]
+      }
+    }]

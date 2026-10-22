@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>محفظتي الصحية</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Firebase CDN -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-sub: #64748b;
+            --border: #e2e8f0;
+            --danger: #ef4444;
+            --success: #16a34a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            padding-bottom: 90px;
+        }
+
+        .auth-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at top, #1e293b, #0f172a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            padding: 20px;
+        }
+
+        .auth-box {
+            background: white;
+            border-radius: 20px;
+            padding: 24px 20px;
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .auth-box h2 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 18px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .auth-tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-sub);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+
+        .auth-tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+            text-align: right;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--text-main);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .btn-auth {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 14px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-top h1 {
+            font-size: 1.15rem;
+            font-weight: 800;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-header-small {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            position: sticky;
+            top: 55px;
+            z-index: 20;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 4px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: #f0f9ff;
+        }
+
+        .container {
+            padding: 12px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .doc-card {
+            background: var(--surface);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .doc-thumb {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            cursor: pointer;
+            display: block;
+            background: #f1f5f9;
+        }
+
+        .doc-footer {
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+        }
+
+        .doc-date {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-sub);
+        }
+
+        .btn-del {
+            background: #fee2e2;
+            color: var(--danger);
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .bottom-action-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: white;
+            padding: 10px 16px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.06);
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            z-index: 40;
+        }
+
+        .btn-cam-direct {
+            flex: 1;
+            max-width: 320px;
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 18px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .btn-gallery-direct {
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .doctor-banner {
+            background: #fef08a;
+            color: #854d0e;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: none;
+            text-align: center;
+        }
+
+        .lightbox {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.92);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 300;
+            padding: 10px;
+        }
+
+        .lightbox img {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .empty-hint {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-sub);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-overlay" id="authScreen" style="display:none;">
+        <div class="auth-box">
+            <h2>📁 محفظتي الصحية</h2>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" id="tabLoginBtn" onclick="switchAuthMode('login')">تسجيل الدخول</button>
+                <button class="auth-tab-btn" id="tabRegisterBtn" onclick="switchAuthMode('register')">إنشاء حساب جديد</button>
+            </div>
+
+            <div id="loginForm">
+                <div class="input-group">
+                    <label>رقم الهاتف</label>
+                    <input type="tel" id="loginPhone" placeholder="أدخل رقم هاتفك">
+                </div>
+                <div class="input-group">
+                    <label>رمز السر</label>
+                    <input type="password" id="loginPass" placeholder="رمز السر">
+                </div>
+                <button class="btn-auth" onclick="submitLogin()">دخول 🚪</button>
+            </div>
+
+            <div id="registerForm" style="display:none;">
+                <div class="input-group">
+                    <label>رقم الهاتف للتسجيل</label>
+                    <input type="tel" id="regPhone" placeholder="مثال: 98123456">
+                </div>
+                <div class="input-group">
+                    <label>اختر رمز سر للحساب</label>
+                    <input type="password" id="regPass" placeholder="رمز السر">
+                </div>
+                <div class="input-group">
+                    <label>تأكيد رمز السر</label>
+                    <input type="password" id="regPassConfirm" placeholder="أعد كتابة رمز السر">
+                </div>
+                <button class="btn-auth" onclick="submitRegister()">تأكيد وإنشاء الحساب ✨</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="doctor-banner" id="doctorBanner">
+        أنت الآن تتصفح ملف المريض: <span id="docPatientPhone"></span>
+        <button onclick="exitDoctorMode()" style="margin-right:10px; padding:2px 8px; border-radius:4px; border:none; cursor:pointer;">العودة لملفي</button>
+    </div>
+
+    <header>
+        <div class="header-top">
+            <h1>محفظتي الصحية</h1>
+            <div class="header-actions">
+                <button class="btn-header-small" onclick="promptDoctorSearch()">👨‍⚕️ كشف الطبيب</button>
+                <button class="btn-header-small" onclick="logout()">خروج 🚪</button>
+            </div>
+        </div>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab-btn active" id="tab-prescriptions" onclick="switchCategory('prescriptions')">📋 الوصفات</button>
+        <button class="tab-btn" id="tab-medicines" onclick="switchCategory('medicines')">💊 علب الأدوية</button>
+        <button class="tab-btn" id="tab-tests" onclick="switchCategory('tests')">🔬 التحاليل</button>
+    </nav>
+
+    <main class="container">
+        <div id="cardsGrid" class="cards-grid"></div>
+        <div id="emptyState" class="empty-hint" style="display:none;">
+            <div style="font-size: 2.5rem; margin-bottom: 6px;">📸</div>
+            <p style="font-weight:700; font-size:0.95rem;">لا توجد صور بعد في هذا القسم</p>
+            <span style="font-size:0.8rem; color:#64748b;">اضغط على زر الكاميرا بالأسفل لالتقاط الصورة</span>
+        </div>
+    </main>
+
+    <div class="bottom-action-bar" id="bottomBar">
+        <input type="file" id="directCamInput" accept="image/*" capture="environment" style="display:none;" onchange="handleIncomingPhoto(event)">
+        <input type="file" id="galleryInput" accept="image/*" style="display:none;" onchange="handleIncomingPhoto(event)">
+
+        <button class="btn-cam-direct" onclick="document.getElementById('directCamInput').click()">
+            <span>📸</span>
+            <span>التقاط صورة وحفظ</span>
+        </button>
+        <button class="btn-gallery-direct" onclick="document.getElementById('galleryInput').click()">
+            من المعرض 🖼️
+        </button>
+    </div>
+
+    <div class="lightbox" id="lightbox" onclick="this.style.display='none'">
+        <img id="lightboxImg" src="">
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAmFD3GKwNxn-twzahkO8EwnttYZ_rqf9U",
+            authDomain: "prepa-tunisie-58900.firebaseapp.com",
+            databaseURL: "https://prepa-tunisie-58900-default-rtdb.firebaseio.com",
+            projectId: "prepa-tunisie-58900",
+            storageBucket: "prepa-tunisie-58900.firebasestorage.app",
+            messagingSenderId: "924361760246",
+            appId: "1:924361760246:web:a33c9a948943777b74fbd7"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const cloudDb = firebase.firestore();
+
+        let localDb;
+        let currentCategory = 'prescriptions';
+        let currentPhone = localStorage.getItem('user_phone') || '';
+        let activeViewingPhone = currentPhone;
+
+        function initApp() {
+            const req = indexedDB.open('HealthWalletDB', 5);
+            req.onupgradeneeded = (e) => {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains('documents')) {
+                    db.createObjectStore('documents', { keyPath: 'id', autoIncrement: true });
+                }
+            };
+            req.onsuccess = (e) => {
+                localDb = e.target.result;
+                checkUserAuth();
+            };
+        }
+
+        function checkUserAuth() {
+            if (!currentPhone) {
+                document.getElementById('authScreen').style.display = 'flex';
+            } else {
+                document.getElementById('authScreen').style.display = 'none';
+                activeViewingPhone = currentPhone;
+                loadCategoryData();
+            }
+        }
+
+        function switchAuthMode(mode) {
+            const isLogin = mode === 'login';
+            document.getElementById('tabLoginBtn').classList.toggle('active', isLogin);
+            document.getElementById('tabRegisterBtn').classList.toggle('active', !isLogin);
+            document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
+            document.getElementById('registerForm').style.display = isLogin ? 'none' : 'block';
+        }
+
+        async function submitLogin() {
+            const phone = document.getElementById('loginPhone').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+
+            if (!phone || !pass) {
+                alert('الرجاء كتابة رقم الهاتف ورمز السر');
+                return;
+            }
+
+            try {
+                const userDoc = await cloudDb.collection('app_users').doc(phone).get();
+                if (!userDoc.exists) {
+                    alert('هذا الرقم غير مسجل. يرجى الضغط على "إنشاء حساب جديد" أولاً.');
+                    return;
+                }
+
+                if (userDoc.data().password !== pass) {
+                    alert('رمز السر غير صحيح');
+                    return;
+                }
+
+                completeLogin(phone);
+            } catch (e) {
+                completeLogin(phone);
+            }
+        }
+
+        async function submitRegister() {
+            const phone = document.getElementById('regPhone').value.trim();
+            const pass = document.getElementById('regPass').value.trim();
+            const passConf = document.getElementById('regPassConfirm').value.trim();
+
+            if (!phone || !pass) {
+                alert('الرجاء إدخال رقم الهاتف ورمز السر');
+                return;
+            }
+
+            if (pass !== passConf) {
+                alert('رمز السر غير متطابق مع خانة التأكيد');
+                return;
+            }
+
+            try {
+                const userDoc = await cloudDb.collection('app_users').doc(phone).get();
+                if (userDoc.exists) {
+                    alert('هذا الرقم مسجل مسبقاً! قم بتسجيل الدخول مباشرة.');
+                    switchAuthMode('login');
+                    document.getElementById('loginPhone').value = phone;
+                    return;
+                }
+
+                await cloudDb.collection('app_users').doc(phone).set({
+                    phone: phone,
+                    password: pass,
+                    createdAt: Date.now()
+                });
+
+                alert('تم إنشاء الحساب بنجاح!');
+                completeLogin(phone);
+            } catch (e) {
+                alert('تعذر إنشاء الحساب، تأكد من اتصال الإنترنت.');
+            }
+        }
+
+        function completeLogin(phone) {
+            currentPhone = phone;
+            activeViewingPhone = phone;
+            localStorage.setItem('user_phone', phone);
+            document.getElementById('authScreen').style.display = 'none';
+            syncCloudToLocal();
+            loadCategoryData();
+        }
+
+        function logout() {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
+                localStorage.removeItem('user_phone');
+                location.reload();
+            }
+        }
+
+        async function promptDoctorSearch() {
+            const targetPhone = prompt('أدخل رقم هاتف المريض لعرض وصفاته وأدويته:');
+            if (!targetPhone) return;
+
+            activeViewingPhone = targetPhone.trim();
+            document.getElementById('doctorBanner').style.display = 'block';
+            document.getElementById('docPatientPhone').textContent = activeViewingPhone;
+            document.getElementById('bottomBar').style.display = 'none';
+            loadCategoryData();
+        }
+
+        function exitDoctorMode() {
+            activeViewingPhone = currentPhone;
+            document.getElementById('doctorBanner').style.display = 'none';
+            document.getElementById('bottomBar').style.display = 'flex';
+            loadCategoryData();
+        }
+
+        function switchCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-${cat}`).classList.add('active');
+            loadCategoryData();
+        }
+
+        function handleIncomingPhoto(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_SIZE = 950;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height && width > MAX_SIZE) {
+                        height = Math.round((height * MAX_SIZE) / width);
+                        width = MAX_SIZE;
+                    } else if (height > MAX_SIZE) {
+                        width = Math.round((width * MAX_SIZE) / height);
+                        height = MAX_SIZE;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const finalPhoto = canvas.toDataURL('image/jpeg', 0.72);
+                    saveDocument(finalPhoto);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+            e.target.value = '';
+        }
+
+        function saveDocument(photoData) {
+            const today = new Date();
+            const record = {
+                phone: activeViewingPhone,
+                category: currentCategory,
+                photo: photoData,
+                date: today.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+                timestamp: Date.now()
+            };
+
+            const tx = localDb.transaction(['documents'], 'readwrite');
+            tx.objectStore('documents').add(record);
+
+            tx.oncomplete = () => {
+                loadCategoryData();
+                if (navigator.onLine) {
+                    cloudDb.collection('user_documents').add(record).catch(() => {});
+                }
+            };
+        }
+
+        function loadCategoryData() {
+            const grid = document.getElementById('cardsGrid');
+            const empty = document.getElementById('emptyState');
+            grid.innerHTML = '';
+
+            const tx = localDb.transaction(['documents'], 'readonly');
+            const store = tx.objectStore('documents');
+            const req = store.getAll();
+
+            req.onsuccess = () => {
+                const items = req.result.filter(item => 
+                    item.category === currentCategory && item.phone === activeViewingPhone
+                );
+
+                if (items.length === 0) {
+                    empty.style.display = 'block';
+                    return;
+                }
+                empty.style.display = 'none';
+
+                items.reverse().forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'doc-card';
+                    card.innerHTML = `
+                        <img src="${item.photo}" class="doc-thumb" onclick="showLightbox('${item.photo}')" alt="مستند">
+                        <div class="doc-footer">
+                            <div class="doc-date">📅 ${item.date}</div>
+                            ${activeViewingPhone === currentPhone ? `<button class="btn-del" onclick="deleteDoc(${item.id})">🗑️</button>` : ''}
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            };
+        }
+
+        function deleteDoc(id) {
+            if (confirm('حذف هذه الصورة؟')) {
+                const tx = localDb.transaction(['documents'], 'readwrite');
+                tx.objectStore('documents').delete(id);
+                tx.oncomplete = () => loadCategoryData();
+            }
+        }
+
+        function showLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+
+        async function syncCloudToLocal() {
+            if (!navigator.onLine || !activeViewingPhone) return;
+
+            try {
+                const snap = await cloudDb.collection('user_documents')
+                    .where('phone', '==', activeViewingPhone)
+                    .get();
+
+                if (!snap.empty) {
+                    const tx = localDb.transaction(['documents'], 'readwrite');
+                    const store = tx.objectStore('documents');
+                    snap.forEach(doc => store.add(doc.data()));
+                    tx.oncomplete = () => loadCategoryData();
+                }
+            } catch (e) {}
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>

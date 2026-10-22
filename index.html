@@ -254,7 +254,6 @@
             font-size: 0.85rem;
         }
 
-        /* Cartes Annuaire Médecins */
         .doctor-card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -361,7 +360,6 @@
             color: var(--text-sub);
         }
 
-        /* Fenêtres modales personnalisées */
         .app-modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -483,10 +481,7 @@
     </nav>
 
     <main class="container">
-        <!-- قسم الصور (الوصفات، الأدوية، التحاليل) -->
         <div id="cardsGrid" class="cards-grid"></div>
-
-        <!-- قسم دليل الأطباء العام -->
         <div id="doctorsListContainer" style="display:none;"></div>
 
         <div id="emptyState" class="empty-hint" style="display:none;">
@@ -515,10 +510,10 @@
             <h3>🔐 دخول الإدارة</h3>
             <p>أدخل الكود الخاص وكلمة السر لإدارة دليل الأطباء</p>
             <div class="input-group">
-                <input type="password" id="adminCodeInput" placeholder="الكود الخاص">
+                <input type="tel" id="adminCodeInput" placeholder="الكود الخاص" style="letter-spacing:3px; font-size:1.1rem;">
             </div>
             <div class="input-group">
-                <input type="password" id="adminPassInput" placeholder="كلمة السر">
+                <input type="tel" id="adminPassInput" placeholder="كلمة السر" style="letter-spacing:3px; font-size:1.1rem;">
             </div>
             <div class="app-modal-actions">
                 <button class="app-modal-btn app-modal-btn-primary" onclick="verifyAdminAccess()">دخول</button>
@@ -851,7 +846,6 @@
             document.getElementById('lightbox').style.display = 'flex';
         }
 
-        // Maintien de l'absence de doublons
         async function syncCloudToLocal() {
             if (!navigator.onLine || !activeViewingPhone) return;
 
@@ -919,7 +913,15 @@
             }
         }
 
-        // --- ACCÈS ADMINISTRATEUR SECRET (7777 / 1111) ---
+        // --- ACCÈS ADMINISTRATEUR (NORMALISATION DES CHIFFRES) ---
+        function normalizeDigits(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/[٠-٩]/g, d => d.charCodeAt(0) - 1632)
+                .replace(/[۰-۹]/g, d => d.charCodeAt(0) - 1776)
+                .trim();
+        }
+
         function handleTitleClicks() {
             titleClickCount++;
             clearTimeout(titleClickTimer);
@@ -938,8 +940,11 @@
         }
 
         function verifyAdminAccess() {
-            const code = document.getElementById('adminCodeInput').value.trim();
-            const pass = document.getElementById('adminPassInput').value.trim();
+            const rawCode = document.getElementById('adminCodeInput').value;
+            const rawPass = document.getElementById('adminPassInput').value;
+
+            const code = normalizeDigits(rawCode);
+            const pass = normalizeDigits(rawPass);
 
             if (code === '7777' && pass === '1111') {
                 isAdminLoggedIn = true;

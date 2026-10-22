@@ -326,6 +326,28 @@
             padding: 50px 20px;
             color: var(--text-sub);
         }
+
+        /* نافذة الإدخال البديلة لـ prompt */
+        .custom-dialog-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 250;
+            padding: 20px;
+        }
+
+        .custom-dialog-box {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            width: 100%;
+            max-width: 320px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
@@ -378,7 +400,6 @@
         <div class="header-top">
             <h1>محفظتي الصحية</h1>
             <div class="header-actions">
-                <button class="btn-header-small" onclick="promptDoctorSearch()">👨‍⚕️ كشف الطبيب</button>
                 <button class="btn-header-small" onclick="logout()">خروج 🚪</button>
             </div>
         </div>
@@ -410,6 +431,19 @@
         <button class="btn-gallery-direct" onclick="document.getElementById('galleryInput').click()">
             من المعرض 🖼️
         </button>
+    </div>
+
+    <!-- نافذة بديلة لرسالة prompt الخاصة بالمتصفح -->
+    <div class="custom-dialog-overlay" id="doctorSearchModal">
+        <div class="custom-dialog-box">
+            <h3 style="color:var(--primary); margin-bottom:10px; font-size:1.1rem;">ملف المريض</h3>
+            <p style="font-size:0.85rem; color:var(--text-sub); margin-bottom:12px;">أدخل رقم هاتف المريض لعرض وصفاته وأدويته:</p>
+            <input type="tel" id="doctorSearchInput" placeholder="رقم الهاتف" style="width:100%; padding:10px; border:1.5px solid var(--border); border-radius:8px; text-align:center; font-weight:700; margin-bottom:15px; outline:none;">
+            <div style="display:flex; gap:8px;">
+                <button onclick="confirmDoctorSearch()" style="flex:1; background:var(--primary); color:white; border:none; padding:9px; border-radius:8px; font-weight:700; cursor:pointer;">عرض</button>
+                <button onclick="closeDoctorSearchModal()" style="flex:1; background:#e2e8f0; color:#334155; border:none; padding:9px; border-radius:8px; font-weight:700; cursor:pointer;">إلغاء</button>
+            </div>
+        </div>
     </div>
 
     <div class="lightbox" id="lightbox" onclick="this.style.display='none'">
@@ -546,11 +580,21 @@
             }
         }
 
-        async function promptDoctorSearch() {
-            const targetPhone = prompt('أدخل رقم هاتف المريض لعرض وصفاته وأدويته:');
+        function promptDoctorSearch() {
+            document.getElementById('doctorSearchInput').value = '';
+            document.getElementById('doctorSearchModal').style.display = 'flex';
+        }
+
+        function closeDoctorSearchModal() {
+            document.getElementById('doctorSearchModal').style.display = 'none';
+        }
+
+        function confirmDoctorSearch() {
+            const targetPhone = document.getElementById('doctorSearchInput').value.trim();
             if (!targetPhone) return;
 
-            activeViewingPhone = targetPhone.trim();
+            closeDoctorSearchModal();
+            activeViewingPhone = targetPhone;
             document.getElementById('doctorBanner').style.display = 'block';
             document.getElementById('docPatientPhone').textContent = activeViewingPhone;
             document.getElementById('bottomBar').style.display = 'none';

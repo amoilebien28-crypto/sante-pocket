@@ -40,7 +40,6 @@
             min-height: 100vh;
         }
 
-        /* شاشة تسجيل الدخول */
         .auth-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -170,7 +169,6 @@
             margin: auto;
         }
 
-        /* --- تصميم القائمة الرئيسية بالأزرار الكبيرة والمقال --- */
         .daily-article-box {
             background: white;
             border: 2px solid #0284c7;
@@ -239,7 +237,6 @@
             color: var(--text-sub);
         }
 
-        /* --- شاشات الأقسام الفرعية --- */
         .subpage-container {
             display: none;
             padding-bottom: 90px;
@@ -317,7 +314,6 @@
             font-size: 0.9rem;
         }
 
-        /* دليل الأطباء */
         .doctor-card {
             background: white;
             border: 1.5px solid var(--border);
@@ -393,7 +389,6 @@
             cursor: pointer;
         }
 
-        /* --- واجهة المسؤول (Admin) --- */
         #adminView {
             display: none;
             padding-bottom: 30px;
@@ -433,7 +428,6 @@
             object-fit: contain;
         }
 
-        /* نافذة التنبيه */
         .app-modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -490,7 +484,6 @@
 </head>
 <body>
 
-    <!-- شاشة الدخول الموحدة -->
     <div class="auth-overlay" id="authScreen" style="display:none;">
         <div class="auth-box">
             <h2>📁 محفظتي الصحية</h2>
@@ -530,15 +523,12 @@
         </div>
     </div>
 
-    <!-- الشريط العلوي -->
     <header>
         <h1 id="headerTitle">محفظتي الصحية</h1>
         <button class="btn-logout" onclick="logout()">خروج 🚪</button>
     </header>
 
-    <!-- 1. واجهة المستخدمين (الصفحة الرئيسية) -->
     <main class="container" id="userMainMenu">
-        <!-- لوح المقال اليومي -->
         <div class="daily-article-box">
             <div class="daily-article-header">
                 <span>📢</span>
@@ -549,7 +539,6 @@
             </div>
         </div>
 
-        <!-- الأزرار الكبيرة العمودية -->
         <div class="big-buttons-list">
             <button class="btn-main-menu" onclick="openSubpage('prescriptions', '📋 الوصفات الطبية')">
                 <div class="btn-main-menu-text">
@@ -585,7 +574,6 @@
         </div>
     </main>
 
-    <!-- 2. الشاشات الداخلية للأقسام (الوصفات، الأدوية، التحاليل، الأطباء) -->
     <div class="container subpage-container" id="subpageContainer">
         <div class="subpage-header">
             <button class="btn-back" onclick="backToMainMenu()">➔ رجوع للرئيسية</button>
@@ -601,7 +589,6 @@
         </div>
     </div>
 
-    <!-- أزرار التقاط الصور الثابتة في الأسفل -->
     <div class="bottom-action-bar" id="photoBottomBar" style="display:none;">
         <input type="file" id="directCamInput" accept="image/*" capture="environment" style="display:none;" onchange="handleIncomingPhoto(event)">
         <input type="file" id="galleryInput" accept="image/*" style="display:none;" onchange="handleIncomingPhoto(event)">
@@ -615,13 +602,11 @@
         </button>
     </div>
 
-    <!-- 3. لوحة تحكم المسؤول الخاصة (Admin Dashboard) -->
     <main class="container" id="adminView">
         <div style="background:#fef3c7; border:1px solid #f59e0b; border-radius:12px; padding:12px; margin-bottom:15px; text-align:center; font-weight:800; color:#b45309;">
             ⚙️ لوحة إدارة النظام العام
         </div>
 
-        <!-- تعديل المقال اليومي -->
         <div class="admin-card">
             <h3>📢 تحديث لوح الإعلانات / المقال اليومي</h3>
             <div class="input-group">
@@ -630,7 +615,6 @@
             <button class="btn-auth" onclick="publishDailyArticle()">نشر المقال للجميع 🚀</button>
         </div>
 
-        <!-- إضافة طبيب للدليل -->
         <div class="admin-card">
             <h3>👨‍⚕️ إضافة طبيب جديد للدليل العام</h3>
             <div class="input-group">
@@ -652,14 +636,12 @@
             <button class="btn-auth" onclick="publishNewDoctor()">إضافة الطبيب إلى الدليل ✨</button>
         </div>
 
-        <!-- قائمة الأطباء الحالية للحذف -->
         <div class="admin-card">
             <h3>📋 قائمة الأطباء المنشورين حالياً</h3>
             <div id="adminDoctorsList"></div>
         </div>
     </main>
 
-    <!-- المودال والتنبيهات واللايت بوكس -->
     <div class="lightbox" id="lightbox" onclick="this.style.display='none'">
         <img id="lightboxImg" src="">
     </div>
@@ -689,7 +671,7 @@
 
         let localDb;
         let currentPhone = localStorage.getItem('user_phone') || '';
-        let userRole = localStorage.getItem('user_role') || 'user'; // 'user' ou 'admin'
+        let userRole = localStorage.getItem('user_role') || 'user';
         let currentSubCategory = '';
 
         function normalizeDigits(str) {
@@ -774,7 +756,7 @@
                 return;
             }
 
-            // التحقق المباشر من حساب الأدمن الخاص (7777 / 1111)
+            // الدخول الفوري كمسؤول للنظام
             if (phone === '7777' && pass === '1111') {
                 currentPhone = '7777';
                 userRole = 'admin';
@@ -785,11 +767,11 @@
                 return;
             }
 
-            // الدخول العادي للمستخدمين
+            // الدخول للمستخدم العادي
             try {
                 const userDoc = await cloudDb.collection('app_users').doc(phone).get();
                 if (!userDoc.exists) {
-                    showAppAlert('تنبيه', 'هذا الرقم غير مسجل، يرجى إنشاء حساب جديد أولاً.');
+                    showAppAlert('تنبيه', 'هذا الرقم غير مسجل، يرجى الضغط على "حساب جديد" أولاً.');
                     return;
                 }
 
@@ -805,12 +787,7 @@
                 document.getElementById('authScreen').style.display = 'none';
                 showUserInterface();
             } catch (e) {
-                currentPhone = phone;
-                userRole = 'user';
-                localStorage.setItem('user_phone', phone);
-                localStorage.setItem('user_role', 'user');
-                document.getElementById('authScreen').style.display = 'none';
-                showUserInterface();
+                showAppAlert('خطأ', 'تعذر الاتصال بقاعدة البيانات، تأكد من الإنترنت.');
             }
         }
 
@@ -862,7 +839,6 @@
             });
         }
 
-        // --- واجهة المستخدم ---
         function showUserInterface() {
             document.getElementById('headerTitle').textContent = 'محفظتي الصحية';
             document.getElementById('userMainMenu').style.display = 'block';
@@ -1074,7 +1050,6 @@
             }
         }
 
-        // --- لوحة تحكم المسؤول (ADMIN) ---
         function showAdminDashboard() {
             document.getElementById('headerTitle').textContent = 'لوحة إدارة النظام ⚙️';
             document.getElementById('userMainMenu').style.display = 'none';
@@ -1082,7 +1057,6 @@
             document.getElementById('photoBottomBar').style.display = 'none';
             document.getElementById('adminView').style.display = 'block';
 
-            // جلب النص الحالي للمقال
             cloudDb.collection('app_settings').doc('daily_article').get().then(doc => {
                 if (doc.exists && doc.data().text) {
                     document.getElementById('adminArticleInput').value = doc.data().text;

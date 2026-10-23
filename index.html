@@ -6,7 +6,7 @@
     <title>محفظتي الصحية</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Firebase CDN -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -14,15 +14,15 @@
 
     <style>
         :root {
-            --primary: #0284c7;
-            --primary-dark: #0369a1;
-            --bg: #f8fafc;
-            --surface: #ffffff;
+            --primary: #059669;
+            --primary-dark: #047857;
+            --bg-gradient: linear-gradient(135deg, #f0fdf4 0%, #e6fcf5 50%, #f4fbf7 100%);
+            --surface: rgba(255, 255, 255, 0.95);
             --text-main: #0f172a;
-            --text-sub: #64748b;
-            --border: #cbd5e1;
+            --text-sub: #475569;
+            --border: #d1fae5;
             --danger: #ef4444;
-            --success: #16a34a;
+            --success: #10b981;
         }
 
         * {
@@ -35,15 +35,17 @@
         }
 
         body {
-            background-color: var(--bg);
+            background: var(--bg-gradient);
+            background-attachment: fixed;
             color: var(--text-main);
             min-height: 100vh;
         }
 
+        /* شاشة تسجيل الدخول */
         .auth-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at top, #1e293b, #0f172a);
+            background: radial-gradient(circle at top, #064e3b, #022c22);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -53,19 +55,19 @@
 
         .auth-box {
             background: white;
-            border-radius: 20px;
-            padding: 24px 20px;
+            border-radius: 24px;
+            padding: 26px 22px;
             width: 100%;
             max-width: 360px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 16px 36px rgba(0,0,0,0.35);
         }
 
         .auth-box h2 {
-            font-size: 1.3rem;
-            color: var(--primary);
-            margin-bottom: 15px;
-            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+            font-weight: 900;
         }
 
         .auth-tabs {
@@ -79,7 +81,7 @@
             padding: 10px;
             border: none;
             background: transparent;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 0.95rem;
             color: var(--text-sub);
             cursor: pointer;
@@ -99,68 +101,78 @@
         .input-group label {
             display: block;
             font-size: 0.85rem;
-            font-weight: 700;
+            font-weight: 800;
             margin-bottom: 6px;
             color: var(--text-main);
         }
 
         .input-group input, .input-group textarea {
             width: 100%;
-            padding: 12px 14px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
+            padding: 13px 14px;
+            border: 2px solid #cbd5e1;
+            border-radius: 14px;
             font-size: 1rem;
             outline: none;
             text-align: center;
             font-weight: 700;
+            background: #f8fafc;
+        }
+
+        .input-group input:focus, .input-group textarea:focus {
+            border-color: var(--primary);
+            background: #ffffff;
         }
 
         .input-group textarea {
             text-align: right;
             resize: none;
-            height: 90px;
+            height: 95px;
         }
 
         .btn-auth {
             width: 100%;
-            padding: 13px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 14px;
+            background: linear-gradient(135deg, #059669, #047857);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 1.05rem;
             font-weight: 800;
             cursor: pointer;
-            margin-top: 8px;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
         }
 
+        /* شريط العنوان */
         header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            background: linear-gradient(135deg, #059669, #047857);
             color: white;
-            padding: 16px;
+            padding: 16px 20px;
             position: sticky;
             top: 0;
             z-index: 30;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(4, 120, 87, 0.2);
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         header h1 {
-            font-size: 1.25rem;
-            font-weight: 800;
+            font-size: 1.3rem;
+            font-weight: 900;
+            letter-spacing: 0.5px;
         }
 
         .btn-logout {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.22);
             color: white;
             border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
+            padding: 6px 14px;
+            border-radius: 10px;
             font-size: 0.85rem;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
+            backdrop-filter: blur(4px);
         }
 
         .container {
@@ -169,112 +181,165 @@
             margin: auto;
         }
 
+        /* لوح المقال اليومي */
         .daily-article-box {
-            background: white;
-            border: 2px solid #0284c7;
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #10b981;
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 22px;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .daily-article-box::before {
+            content: "🌿";
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-size: 3.5rem;
+            opacity: 0.08;
+            pointer-events: none;
         }
 
         .daily-article-header {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-weight: 800;
-            color: var(--primary);
-            font-size: 1rem;
-            margin-bottom: 8px;
-            border-bottom: 1px dashed var(--border);
-            padding-bottom: 6px;
+            font-weight: 900;
+            color: var(--primary-dark);
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            border-bottom: 1.5px dashed #a7f3d0;
+            padding-bottom: 8px;
         }
 
         .daily-article-content {
-            font-size: 1.05rem;
-            line-height: 1.6;
+            font-size: 1.1rem;
+            line-height: 1.65;
             color: #1e293b;
-            font-weight: 700;
+            font-weight: 800;
             white-space: pre-line;
         }
 
+        /* قائمة الأزرار الكبيرة الملونة */
         .big-buttons-list {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 16px;
         }
 
         .btn-main-menu {
             width: 100%;
-            background: white;
-            border: 2px solid #94a3b8;
-            border-radius: 18px;
-            padding: 18px 20px;
+            border: none;
+            border-radius: 22px;
+            padding: 20px 22px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.04);
-            transition: all 0.2s ease;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-main-menu:active {
-            transform: scale(0.98);
-            background: #f1f5f9;
+            transform: scale(0.97);
         }
 
         .btn-main-menu-text {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: var(--text-main);
+            gap: 14px;
+            font-size: 1.3rem;
+            font-weight: 900;
+        }
+
+        .btn-main-menu-icon {
+            font-size: 1.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         .btn-main-menu-arrow {
-            font-size: 1.4rem;
-            color: var(--text-sub);
+            font-size: 1.3rem;
+            font-weight: 900;
+            opacity: 0.7;
         }
 
+        /* تلوين الأزرار الأربعة بالألوان الجذابة والمريحة */
+        .btn-theme-prescriptions {
+            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+            color: #0369a1;
+            border: 2px solid #7dd3fc;
+        }
+
+        .btn-theme-medicines {
+            background: linear-gradient(135deg, #ffedd5, #fed7aa);
+            color: #c2410c;
+            border: 2px solid #fdba74;
+        }
+
+        .btn-theme-tests {
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            color: #7e22ce;
+            border: 2px solid #d8b4fe;
+        }
+
+        .btn-theme-doctors {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            color: #15803d;
+            border: 2px solid #86efac;
+        }
+
+        /* الشاشات الفرعية */
         .subpage-container {
             display: none;
-            padding-bottom: 90px;
+            padding-bottom: 95px;
         }
 
         .subpage-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .btn-back {
-            background: #e2e8f0;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 12px;
-            font-weight: 800;
-            font-size: 0.95rem;
+            background: white;
+            border: 1.5px solid #cbd5e1;
+            padding: 10px 16px;
+            border-radius: 14px;
+            font-weight: 900;
+            font-size: 1rem;
             color: var(--text-main);
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
         }
 
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 12px;
         }
 
         .doc-card {
-            background: var(--surface);
-            border-radius: 14px;
+            background: white;
+            border-radius: 16px;
             overflow: hidden;
-            border: 1px solid var(--border);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            border: 1.5px solid #e2e8f0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
         }
 
         .doc-thumb {
@@ -287,7 +352,7 @@
         }
 
         .doc-footer {
-            padding: 8px 10px;
+            padding: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -295,8 +360,8 @@
         }
 
         .doc-date {
-            font-size: 0.8rem;
-            font-weight: 700;
+            font-size: 0.85rem;
+            font-weight: 800;
             color: var(--text-sub);
         }
 
@@ -304,110 +369,116 @@
             background: #fee2e2;
             color: var(--danger);
             border: none;
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .doctor-card {
             background: white;
-            border: 1.5px solid var(--border);
-            border-radius: 14px;
-            padding: 14px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            border: 1.5px solid #d1fae5;
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .doctor-info h4 {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
+            color: #064e3b;
             margin-bottom: 4px;
+            font-weight: 900;
         }
 
         .doctor-info p {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-sub);
             font-weight: 700;
         }
 
         .btn-call {
             background: #dcfce7;
-            color: var(--success);
+            color: #15803d;
             text-decoration: none;
-            padding: 10px 16px;
-            border-radius: 20px;
-            font-weight: 800;
-            font-size: 0.95rem;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-weight: 900;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 6px;
+            border: 1.5px solid #86efac;
         }
 
         .bottom-action-bar {
             position: fixed;
             bottom: 0; left: 0; right: 0;
-            background: white;
-            padding: 12px 16px;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(10px);
+            padding: 14px 20px;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.06);
             display: flex;
-            gap: 10px;
+            gap: 12px;
             justify-content: center;
             z-index: 40;
         }
 
         .btn-cam-direct {
             flex: 1;
-            background: linear-gradient(135deg, #0284c7, #2563eb);
+            background: linear-gradient(135deg, #059669, #0284c7);
             color: white;
             border: none;
-            border-radius: 30px;
+            border-radius: 35px;
             padding: 14px;
-            font-size: 1rem;
-            font-weight: 800;
+            font-size: 1.05rem;
+            font-weight: 900;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
         }
 
         .btn-gallery-direct {
-            background: #e2e8f0;
+            background: #f1f5f9;
             color: #334155;
-            border: none;
-            border-radius: 30px;
-            padding: 14px 18px;
-            font-size: 0.9rem;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 35px;
+            padding: 14px 20px;
+            font-size: 0.95rem;
             font-weight: 800;
             cursor: pointer;
         }
 
+        /* لوحة تحكم الأدمن */
         #adminView {
             display: none;
-            padding-bottom: 30px;
+            padding-bottom: 35px;
         }
 
         .admin-card {
             background: white;
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 16px;
-            border: 1px solid var(--border);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 18px;
+            border: 1.5px solid #d1fae5;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.04);
         }
 
         .admin-card h3 {
-            font-size: 1.1rem;
-            color: var(--primary);
-            margin-bottom: 12px;
-            font-weight: 800;
+            font-size: 1.15rem;
+            color: var(--primary-dark);
+            margin-bottom: 14px;
+            font-weight: 900;
         }
 
         .lightbox {
@@ -424,56 +495,59 @@
         .lightbox img {
             max-width: 100%;
             max-height: 90vh;
-            border-radius: 8px;
+            border-radius: 12px;
             object-fit: contain;
         }
 
         .app-modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.7);
+            background: rgba(6, 78, 59, 0.5);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 500;
             padding: 20px;
+            backdrop-filter: blur(2px);
         }
 
         .app-modal-box {
             background: white;
-            border-radius: 16px;
-            padding: 22px 18px;
+            border-radius: 20px;
+            padding: 24px 20px;
             width: 100%;
             max-width: 340px;
             text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .app-modal-box h3 {
-            font-size: 1.1rem;
-            color: var(--primary);
+            font-size: 1.15rem;
+            color: var(--primary-dark);
             margin-bottom: 10px;
-            font-weight: 800;
+            font-weight: 900;
         }
 
         .app-modal-box p {
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: var(--text-main);
-            margin-bottom: 16px;
-            line-height: 1.5;
+            margin-bottom: 18px;
+            line-height: 1.6;
+            font-weight: 700;
         }
 
         .app-modal-actions {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             justify-content: center;
         }
 
         .app-modal-btn {
             flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 700;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 800;
             border: none;
             cursor: pointer;
         }
@@ -484,9 +558,10 @@
 </head>
 <body>
 
+    <!-- شاشة الدخول الموحدة -->
     <div class="auth-overlay" id="authScreen" style="display:none;">
         <div class="auth-box">
-            <h2>📁 محفظتي الصحية</h2>
+            <h2>🌿 محفظتي الصحية</h2>
             
             <div class="auth-tabs" id="authTabsBar">
                 <button class="auth-tab-btn active" id="tabLoginBtn" onclick="switchAuthMode('login')">تسجيل الدخول</button>
@@ -523,12 +598,15 @@
         </div>
     </div>
 
+    <!-- الشريط العلوي -->
     <header>
-        <h1 id="headerTitle">محفظتي الصحية</h1>
+        <h1 id="headerTitle">🌿 محفظتي الصحية</h1>
         <button class="btn-logout" onclick="logout()">خروج 🚪</button>
     </header>
 
+    <!-- 1. واجهة المستخدمين (الصفحة الرئيسية ذات الأزرار الملونة) -->
     <main class="container" id="userMainMenu">
+        <!-- لوح المقال اليومي -->
         <div class="daily-article-box">
             <div class="daily-article-header">
                 <span>📢</span>
@@ -539,34 +617,35 @@
             </div>
         </div>
 
+        <!-- الأزرار الكبيرة ذات الألوان الجذابة -->
         <div class="big-buttons-list">
-            <button class="btn-main-menu" onclick="openSubpage('prescriptions', '📋 الوصفات الطبية')">
+            <button class="btn-main-menu btn-theme-prescriptions" onclick="openSubpage('prescriptions', '📋 الوصفات الطبية')">
                 <div class="btn-main-menu-text">
-                    <span style="font-size: 1.6rem;">📋</span>
+                    <div class="btn-main-menu-icon">📋</div>
                     <span>الوصفات الطبية</span>
                 </div>
                 <span class="btn-main-menu-arrow">◀</span>
             </button>
 
-            <button class="btn-main-menu" onclick="openSubpage('medicines', '💊 علب الأدوية')">
+            <button class="btn-main-menu btn-theme-medicines" onclick="openSubpage('medicines', '💊 علب الأدوية')">
                 <div class="btn-main-menu-text">
-                    <span style="font-size: 1.6rem;">💊</span>
+                    <div class="btn-main-menu-icon">💊</div>
                     <span>علب الأدوية</span>
                 </div>
                 <span class="btn-main-menu-arrow">◀</span>
             </button>
 
-            <button class="btn-main-menu" onclick="openSubpage('tests', '🔬 التحاليل الطبية')">
+            <button class="btn-main-menu btn-theme-tests" onclick="openSubpage('tests', '🔬 التحاليل الطبية')">
                 <div class="btn-main-menu-text">
-                    <span style="font-size: 1.6rem;">🔬</span>
+                    <div class="btn-main-menu-icon">🔬</div>
                     <span>التحاليل الطبية</span>
                 </div>
                 <span class="btn-main-menu-arrow">◀</span>
             </button>
 
-            <button class="btn-main-menu" onclick="openSubpage('doctors', '🩺 دليل الأطباء')">
+            <button class="btn-main-menu btn-theme-doctors" onclick="openSubpage('doctors', '🩺 دليل الأطباء')">
                 <div class="btn-main-menu-text">
-                    <span style="font-size: 1.6rem;">🩺</span>
+                    <div class="btn-main-menu-icon">🩺</div>
                     <span>دليل الأطباء</span>
                 </div>
                 <span class="btn-main-menu-arrow">◀</span>
@@ -574,21 +653,23 @@
         </div>
     </main>
 
+    <!-- 2. الشاشات الداخلية للأقسام -->
     <div class="container subpage-container" id="subpageContainer">
         <div class="subpage-header">
             <button class="btn-back" onclick="backToMainMenu()">➔ رجوع للرئيسية</button>
-            <h2 id="subpageTitle" style="font-size:1.15rem; color:var(--primary);"></h2>
+            <h2 id="subpageTitle" style="font-size:1.2rem; color:var(--primary-dark); font-weight:900;"></h2>
         </div>
 
         <div id="cardsGrid" class="cards-grid"></div>
         <div id="doctorsListContainer" style="display:none;"></div>
 
         <div id="emptyState" style="text-align:center; padding:50px 20px; color:#64748b; display:none;">
-            <div style="font-size: 2.8rem; margin-bottom: 8px;">📂</div>
-            <p style="font-weight:700; font-size:1.05rem;">لا توجد عناصر محفوظة هنا</p>
+            <div style="font-size: 3rem; margin-bottom: 8px;">📂</div>
+            <p style="font-weight:800; font-size:1.1rem;">لا توجد عناصر محفوظة هنا</p>
         </div>
     </div>
 
+    <!-- أزرار التصوير بالأسفل -->
     <div class="bottom-action-bar" id="photoBottomBar" style="display:none;">
         <input type="file" id="directCamInput" accept="image/*" capture="environment" style="display:none;" onchange="handleIncomingPhoto(event)">
         <input type="file" id="galleryInput" accept="image/*" style="display:none;" onchange="handleIncomingPhoto(event)">
@@ -602,8 +683,9 @@
         </button>
     </div>
 
+    <!-- 3. لوحة تحكم المسؤول (ADMIN) -->
     <main class="container" id="adminView">
-        <div style="background:#fef3c7; border:1px solid #f59e0b; border-radius:12px; padding:12px; margin-bottom:15px; text-align:center; font-weight:800; color:#b45309;">
+        <div style="background:#ecfdf5; border:1.5px solid #10b981; border-radius:14px; padding:14px; margin-bottom:18px; text-align:center; font-weight:900; color:#065f46;">
             ⚙️ لوحة إدارة النظام العام
         </div>
 
@@ -756,7 +838,6 @@
                 return;
             }
 
-            // الدخول الفوري كمسؤول للنظام
             if (phone === '7777' && pass === '1111') {
                 currentPhone = '7777';
                 userRole = 'admin';
@@ -767,7 +848,6 @@
                 return;
             }
 
-            // الدخول للمستخدم العادي
             try {
                 const userDoc = await cloudDb.collection('app_users').doc(phone).get();
                 if (!userDoc.exists) {
@@ -840,7 +920,7 @@
         }
 
         function showUserInterface() {
-            document.getElementById('headerTitle').textContent = 'محفظتي الصحية';
+            document.getElementById('headerTitle').textContent = '🌿 محفظتي الصحية';
             document.getElementById('userMainMenu').style.display = 'block';
             document.getElementById('subpageContainer').style.display = 'none';
             document.getElementById('adminView').style.display = 'none';
@@ -855,7 +935,7 @@
                     if (doc.exists && doc.data().text) {
                         document.getElementById('dailyArticleText').textContent = doc.data().text;
                     } else {
-                        document.getElementById('dailyArticleText').textContent = 'مرحباً بك في محفظتك الصحية. نتمنى لك دوام الصحة والعافية.';
+                        document.getElementById('dailyArticleText').textContent = 'مرحباً بك في محفظتك الصحية. نتمنى لك دوام الصحة والعافية 🌿';
                     }
                 }, () => {
                     document.getElementById('dailyArticleText').textContent = 'مرحباً بك في محفظتك الصحية.';

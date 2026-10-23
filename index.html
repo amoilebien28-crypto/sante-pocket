@@ -20,7 +20,7 @@
             --surface: #ffffff;
             --text-main: #0f172a;
             --text-sub: #64748b;
-            --border: #e2e8f0;
+            --border: #cbd5e1;
             --danger: #ef4444;
             --success: #16a34a;
         }
@@ -37,9 +37,10 @@
         body {
             background-color: var(--bg);
             color: var(--text-main);
-            padding-bottom: 90px;
+            min-height: 100vh;
         }
 
+        /* شاشة تسجيل الدخول */
         .auth-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -71,7 +72,7 @@
         .auth-tabs {
             display: flex;
             margin-bottom: 18px;
-            border-bottom: 2px solid var(--border);
+            border-bottom: 2px solid #e2e8f0;
         }
 
         .auth-tab-btn {
@@ -92,38 +93,44 @@
         }
 
         .input-group {
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             text-align: right;
         }
 
         .input-group label {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 700;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             color: var(--text-main);
         }
 
-        .input-group input {
+        .input-group input, .input-group textarea {
             width: 100%;
-            padding: 10px 14px;
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            font-size: 0.95rem;
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
             outline: none;
             text-align: center;
             font-weight: 700;
         }
 
+        .input-group textarea {
+            text-align: right;
+            resize: none;
+            height: 90px;
+        }
+
         .btn-auth {
             width: 100%;
-            padding: 12px;
+            padding: 13px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 700;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 800;
             cursor: pointer;
             margin-top: 8px;
         }
@@ -131,74 +138,132 @@
         header {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 14px 16px;
+            padding: 16px;
             position: sticky;
             top: 0;
             z-index: 30;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .header-top {
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .header-top h1 {
-            font-size: 1.15rem;
+        header h1 {
+            font-size: 1.25rem;
             font-weight: 800;
-            cursor: pointer;
         }
 
-        .header-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .btn-header-small {
+        .btn-logout {
             background: rgba(255,255,255,0.2);
             color: white;
             border: none;
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 8px;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: 700;
             cursor: pointer;
-        }
-
-        .tabs {
-            display: flex;
-            background: white;
-            position: sticky;
-            top: 55px;
-            z-index: 20;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 10px 2px;
-            text-align: center;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text-sub);
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-        }
-
-        .tab-btn.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-            background: #f0f9ff;
         }
 
         .container {
-            padding: 12px;
-            max-width: 600px;
+            padding: 16px;
+            max-width: 500px;
             margin: auto;
+        }
+
+        /* --- تصميم القائمة الرئيسية بالأزرار الكبيرة والمقال --- */
+        .daily-article-box {
+            background: white;
+            border: 2px solid #0284c7;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
+        }
+
+        .daily-article-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 6px;
+        }
+
+        .daily-article-content {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #1e293b;
+            font-weight: 700;
+            white-space: pre-line;
+        }
+
+        .big-buttons-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .btn-main-menu {
+            width: 100%;
+            background: white;
+            border: 2px solid #94a3b8;
+            border-radius: 18px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.04);
+            transition: all 0.2s ease;
+        }
+
+        .btn-main-menu:active {
+            transform: scale(0.98);
+            background: #f1f5f9;
+        }
+
+        .btn-main-menu-text {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .btn-main-menu-arrow {
+            font-size: 1.4rem;
+            color: var(--text-sub);
+        }
+
+        /* --- شاشات الأقسام الفرعية --- */
+        .subpage-container {
+            display: none;
+            padding-bottom: 90px;
+        }
+
+        .subpage-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .btn-back {
+            background: #e2e8f0;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .cards-grid {
@@ -209,12 +274,10 @@
 
         .doc-card {
             background: var(--surface);
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
             border: 1px solid var(--border);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-            display: flex;
-            flex-direction: column;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
         }
 
         .doc-thumb {
@@ -235,7 +298,7 @@
         }
 
         .doc-date {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 700;
             color: var(--text-sub);
         }
@@ -244,64 +307,59 @@
             background: #fee2e2;
             color: var(--danger);
             border: none;
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
+        /* دليل الأطباء */
         .doctor-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
+            background: white;
+            border: 1.5px solid var(--border);
             border-radius: 14px;
             padding: 14px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            margin-bottom: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .doctor-info h4 {
-            font-size: 1rem;
-            color: var(--text-main);
+            font-size: 1.1rem;
             margin-bottom: 4px;
         }
 
         .doctor-info p {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-sub);
-        }
-
-        .doctor-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
+            font-weight: 700;
         }
 
         .btn-call {
             background: #dcfce7;
             color: var(--success);
             text-decoration: none;
-            padding: 8px 14px;
+            padding: 10px 16px;
             border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.85rem;
+            font-weight: 800;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
 
         .bottom-action-bar {
             position: fixed;
             bottom: 0; left: 0; right: 0;
             background: white;
-            padding: 10px 16px;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.06);
+            padding: 12px 16px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
             display: flex;
             gap: 10px;
             justify-content: center;
@@ -310,13 +368,12 @@
 
         .btn-cam-direct {
             flex: 1;
-            max-width: 320px;
             background: linear-gradient(135deg, #0284c7, #2563eb);
             color: white;
             border: none;
             border-radius: 30px;
-            padding: 12px 18px;
-            font-size: 0.95rem;
+            padding: 14px;
+            font-size: 1rem;
             font-weight: 800;
             display: flex;
             align-items: center;
@@ -330,10 +387,32 @@
             color: #334155;
             border: none;
             border-radius: 30px;
-            padding: 12px 16px;
-            font-size: 0.85rem;
-            font-weight: 700;
+            padding: 14px 18px;
+            font-size: 0.9rem;
+            font-weight: 800;
             cursor: pointer;
+        }
+
+        /* --- واجهة المسؤول (Admin) --- */
+        #adminView {
+            display: none;
+            padding-bottom: 30px;
+        }
+
+        .admin-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .admin-card h3 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-weight: 800;
         }
 
         .lightbox {
@@ -354,12 +433,7 @@
             object-fit: contain;
         }
 
-        .empty-hint {
-            text-align: center;
-            padding: 50px 20px;
-            color: var(--text-sub);
-        }
-
+        /* نافذة التنبيه */
         .app-modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -378,7 +452,6 @@
             width: 100%;
             max-width: 340px;
             text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
         .app-modal-box h3 {
@@ -389,7 +462,7 @@
         }
 
         .app-modal-box p {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-main);
             margin-bottom: 16px;
             line-height: 1.5;
@@ -411,32 +484,26 @@
             cursor: pointer;
         }
 
-        .app-modal-btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .app-modal-btn-secondary {
-            background: #e2e8f0;
-            color: var(--text-main);
-        }
+        .app-modal-btn-primary { background: var(--primary); color: white; }
+        .app-modal-btn-secondary { background: #e2e8f0; color: var(--text-main); }
     </style>
 </head>
 <body>
 
+    <!-- شاشة الدخول الموحدة -->
     <div class="auth-overlay" id="authScreen" style="display:none;">
         <div class="auth-box">
             <h2>📁 محفظتي الصحية</h2>
             
-            <div class="auth-tabs">
+            <div class="auth-tabs" id="authTabsBar">
                 <button class="auth-tab-btn active" id="tabLoginBtn" onclick="switchAuthMode('login')">تسجيل الدخول</button>
-                <button class="auth-tab-btn" id="tabRegisterBtn" onclick="switchAuthMode('register')">إنشاء حساب جديد</button>
+                <button class="auth-tab-btn" id="tabRegisterBtn" onclick="switchAuthMode('register')">حساب جديد</button>
             </div>
 
             <div id="loginForm">
                 <div class="input-group">
-                    <label>رقم الهاتف</label>
-                    <input type="tel" id="loginPhone" placeholder="أدخل رقم هاتفك">
+                    <label>رقم الهاتف / كود الإدارة</label>
+                    <input type="tel" id="loginPhone" placeholder="أدخل الرقم">
                 </div>
                 <div class="input-group">
                     <label>رمز السر</label>
@@ -447,51 +514,95 @@
 
             <div id="registerForm" style="display:none;">
                 <div class="input-group">
-                    <label>رقم الهاتف للتسجيل</label>
+                    <label>رقم الهاتف</label>
                     <input type="tel" id="regPhone" placeholder="مثال: 98123456">
                 </div>
                 <div class="input-group">
-                    <label>اختر رمز سر للحساب</label>
+                    <label>رمز السر</label>
                     <input type="password" id="regPass" placeholder="رمز السر">
                 </div>
                 <div class="input-group">
                     <label>تأكيد رمز السر</label>
-                    <input type="password" id="regPassConfirm" placeholder="أعد كتابة رمز السر">
+                    <input type="password" id="regPassConfirm" placeholder="أعد رمز السر">
                 </div>
-                <button class="btn-auth" onclick="submitRegister()">تأكيد وإنشاء الحساب ✨</button>
+                <button class="btn-auth" onclick="submitRegister()">تأكيد الحساب ✨</button>
             </div>
         </div>
     </div>
 
+    <!-- الشريط العلوي -->
     <header>
-        <div class="header-top">
-            <h1 onclick="handleTitleClicks()">محفظتي الصحية</h1>
-            <div class="header-actions">
-                <button class="btn-header-small" id="adminBadgeBtn" style="display:none; background:#f59e0b;" onclick="openAdminPanel()">⚙️ الإدارة</button>
-                <button class="btn-header-small" onclick="logout()">خروج 🚪</button>
-            </div>
-        </div>
+        <h1 id="headerTitle">محفظتي الصحية</h1>
+        <button class="btn-logout" onclick="logout()">خروج 🚪</button>
     </header>
 
-    <nav class="tabs">
-        <button class="tab-btn active" id="tab-prescriptions" onclick="switchCategory('prescriptions')">📋 الوصفات</button>
-        <button class="tab-btn" id="tab-medicines" onclick="switchCategory('medicines')">💊 الأدوية</button>
-        <button class="tab-btn" id="tab-tests" onclick="switchCategory('tests')">🔬 التحاليل</button>
-        <button class="tab-btn" id="tab-doctors" onclick="switchCategory('doctors')">🩺 الأطباء</button>
-    </nav>
+    <!-- 1. واجهة المستخدمين (الصفحة الرئيسية) -->
+    <main class="container" id="userMainMenu">
+        <!-- لوح المقال اليومي -->
+        <div class="daily-article-box">
+            <div class="daily-article-header">
+                <span>📢</span>
+                <span>لوح الإعلانات والنصائح اليومية</span>
+            </div>
+            <div class="daily-article-content" id="dailyArticleText">
+                جاري تحميل الرسالة اليومية...
+            </div>
+        </div>
 
-    <main class="container">
-        <div id="cardsGrid" class="cards-grid"></div>
-        <div id="doctorsListContainer" style="display:none;"></div>
+        <!-- الأزرار الكبيرة العمودية -->
+        <div class="big-buttons-list">
+            <button class="btn-main-menu" onclick="openSubpage('prescriptions', '📋 الوصفات الطبية')">
+                <div class="btn-main-menu-text">
+                    <span style="font-size: 1.6rem;">📋</span>
+                    <span>الوصفات الطبية</span>
+                </div>
+                <span class="btn-main-menu-arrow">◀</span>
+            </button>
 
-        <div id="emptyState" class="empty-hint" style="display:none;">
-            <div style="font-size: 2.5rem; margin-bottom: 6px;">📸</div>
-            <p style="font-weight:700; font-size:0.95rem;">لا توجد عناصر بعد في هذا القسم</p>
-            <span id="emptyStateSub" style="font-size:0.8rem; color:#64748b;">اضغط على زر الكاميرا بالأسفل لالتقاط الصورة</span>
+            <button class="btn-main-menu" onclick="openSubpage('medicines', '💊 علب الأدوية')">
+                <div class="btn-main-menu-text">
+                    <span style="font-size: 1.6rem;">💊</span>
+                    <span>علب الأدوية</span>
+                </div>
+                <span class="btn-main-menu-arrow">◀</span>
+            </button>
+
+            <button class="btn-main-menu" onclick="openSubpage('tests', '🔬 التحاليل الطبية')">
+                <div class="btn-main-menu-text">
+                    <span style="font-size: 1.6rem;">🔬</span>
+                    <span>التحاليل الطبية</span>
+                </div>
+                <span class="btn-main-menu-arrow">◀</span>
+            </button>
+
+            <button class="btn-main-menu" onclick="openSubpage('doctors', '🩺 دليل الأطباء')">
+                <div class="btn-main-menu-text">
+                    <span style="font-size: 1.6rem;">🩺</span>
+                    <span>دليل الأطباء</span>
+                </div>
+                <span class="btn-main-menu-arrow">◀</span>
+            </button>
         </div>
     </main>
 
-    <div class="bottom-action-bar" id="bottomBar">
+    <!-- 2. الشاشات الداخلية للأقسام (الوصفات، الأدوية، التحاليل، الأطباء) -->
+    <div class="container subpage-container" id="subpageContainer">
+        <div class="subpage-header">
+            <button class="btn-back" onclick="backToMainMenu()">➔ رجوع للرئيسية</button>
+            <h2 id="subpageTitle" style="font-size:1.15rem; color:var(--primary);"></h2>
+        </div>
+
+        <div id="cardsGrid" class="cards-grid"></div>
+        <div id="doctorsListContainer" style="display:none;"></div>
+
+        <div id="emptyState" style="text-align:center; padding:50px 20px; color:#64748b; display:none;">
+            <div style="font-size: 2.8rem; margin-bottom: 8px;">📂</div>
+            <p style="font-weight:700; font-size:1.05rem;">لا توجد عناصر محفوظة هنا</p>
+        </div>
+    </div>
+
+    <!-- أزرار التقاط الصور الثابتة في الأسفل -->
+    <div class="bottom-action-bar" id="photoBottomBar" style="display:none;">
         <input type="file" id="directCamInput" accept="image/*" capture="environment" style="display:none;" onchange="handleIncomingPhoto(event)">
         <input type="file" id="galleryInput" accept="image/*" style="display:none;" onchange="handleIncomingPhoto(event)">
 
@@ -504,52 +615,55 @@
         </button>
     </div>
 
-    <!-- نافذة الدخول للإدارة السرية -->
-    <div class="app-modal-overlay" id="adminLoginModal">
-        <div class="app-modal-box">
-            <h3>🔐 دخول الإدارة</h3>
-            <p>أدخل الكود الخاص وكلمة السر لإدارة دليل الأطباء</p>
-            <div class="input-group">
-                <input type="tel" id="adminCodeInput" placeholder="الكود الخاص" style="letter-spacing:3px; font-size:1.1rem;">
-            </div>
-            <div class="input-group">
-                <input type="tel" id="adminPassInput" placeholder="كلمة السر" style="letter-spacing:3px; font-size:1.1rem;">
-            </div>
-            <div class="app-modal-actions">
-                <button class="app-modal-btn app-modal-btn-primary" onclick="verifyAdminAccess()">دخول</button>
-                <button class="app-modal-btn app-modal-btn-secondary" onclick="closeAdminLoginModal()">إلغاء</button>
-            </div>
+    <!-- 3. لوحة تحكم المسؤول الخاصة (Admin Dashboard) -->
+    <main class="container" id="adminView">
+        <div style="background:#fef3c7; border:1px solid #f59e0b; border-radius:12px; padding:12px; margin-bottom:15px; text-align:center; font-weight:800; color:#b45309;">
+            ⚙️ لوحة إدارة النظام العام
         </div>
-    </div>
 
-    <!-- نافذة لوحة الإدارة لإضافة طبيب -->
-    <div class="app-modal-overlay" id="adminPanelModal">
-        <div class="app-modal-box" style="max-width:380px;">
-            <h3>⚙️ إضافة طبيب للدليل العام</h3>
+        <!-- تعديل المقال اليومي -->
+        <div class="admin-card">
+            <h3>📢 تحديث لوح الإعلانات / المقال اليومي</h3>
+            <div class="input-group">
+                <textarea id="adminArticleInput" placeholder="اكتب هنا النصيحة اليومية أو الإعلان ليظهر لجميع المرضى..."></textarea>
+            </div>
+            <button class="btn-auth" onclick="publishDailyArticle()">نشر المقال للجميع 🚀</button>
+        </div>
+
+        <!-- إضافة طبيب للدليل -->
+        <div class="admin-card">
+            <h3>👨‍⚕️ إضافة طبيب جديد للدليل العام</h3>
             <div class="input-group">
                 <label>اسم الطبيب</label>
-                <input type="text" id="newDocName" placeholder="مثال: د. منير بن سالم">
+                <input type="text" id="adminDocName" placeholder="مثال: د. منير بن سالم">
             </div>
             <div class="input-group">
                 <label>الاختصاص</label>
-                <input type="text" id="newDocSpec" placeholder="مثال: طب عام / عيون / أطفال">
+                <input type="text" id="adminDocSpec" placeholder="مثال: طب عام / عيون / أطفال">
             </div>
             <div class="input-group">
-                <label>المدينة / العنوان</label>
-                <input type="text" id="newDocCity" placeholder="مثال: جربة - حومة السوق">
+                <label>المدينة</label>
+                <input type="text" id="adminDocCity" placeholder="مثال: جربة - حومة السوق">
             </div>
             <div class="input-group">
                 <label>رقم الهاتف</label>
-                <input type="tel" id="newDocPhone" placeholder="مثال: 75650000">
+                <input type="tel" id="adminDocPhone" placeholder="مثال: 75650000">
             </div>
-            <div class="app-modal-actions">
-                <button class="app-modal-btn app-modal-btn-primary" onclick="saveNewDoctor()">نشر للجميع ✨</button>
-                <button class="app-modal-btn app-modal-btn-secondary" onclick="closeAdminPanelModal()">إغلاق</button>
-            </div>
+            <button class="btn-auth" onclick="publishNewDoctor()">إضافة الطبيب إلى الدليل ✨</button>
         </div>
+
+        <!-- قائمة الأطباء الحالية للحذف -->
+        <div class="admin-card">
+            <h3>📋 قائمة الأطباء المنشورين حالياً</h3>
+            <div id="adminDoctorsList"></div>
+        </div>
+    </main>
+
+    <!-- المودال والتنبيهات واللايت بوكس -->
+    <div class="lightbox" id="lightbox" onclick="this.style.display='none'">
+        <img id="lightboxImg" src="">
     </div>
 
-    <!-- نافذة التنبيهات المخصصة -->
     <div class="app-modal-overlay" id="appModal">
         <div class="app-modal-box">
             <h3 id="appModalTitle">إشعار</h3>
@@ -558,10 +672,6 @@
                 <button class="app-modal-btn app-modal-btn-primary" onclick="closeAppModal()">حسناً</button>
             </div>
         </div>
-    </div>
-
-    <div class="lightbox" id="lightbox" onclick="this.style.display='none'">
-        <img id="lightboxImg" src="">
     </div>
 
     <script>
@@ -578,12 +688,17 @@
         const cloudDb = firebase.firestore();
 
         let localDb;
-        let currentCategory = 'prescriptions';
         let currentPhone = localStorage.getItem('user_phone') || '';
-        let activeViewingPhone = currentPhone;
-        let isAdminLoggedIn = false;
-        let titleClickCount = 0;
-        let titleClickTimer = null;
+        let userRole = localStorage.getItem('user_role') || 'user'; // 'user' ou 'admin'
+        let currentSubCategory = '';
+
+        function normalizeDigits(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/[٠-٩]/g, d => d.charCodeAt(0) - 1632)
+                .replace(/[۰-۹]/g, d => d.charCodeAt(0) - 1776)
+                .trim();
+        }
 
         function showAppAlert(title, message) {
             document.getElementById('appModalTitle').textContent = title;
@@ -613,7 +728,7 @@
         }
 
         function initApp() {
-            const req = indexedDB.open('HealthWalletDB', 5);
+            const req = indexedDB.open('HealthWalletDB', 6);
             req.onupgradeneeded = (e) => {
                 const db = e.target.result;
                 if (!db.objectStoreNames.contains('documents')) {
@@ -622,17 +737,20 @@
             };
             req.onsuccess = (e) => {
                 localDb = e.target.result;
-                checkUserAuth();
+                checkSession();
             };
         }
 
-        function checkUserAuth() {
+        function checkSession() {
             if (!currentPhone) {
                 document.getElementById('authScreen').style.display = 'flex';
             } else {
                 document.getElementById('authScreen').style.display = 'none';
-                activeViewingPhone = currentPhone;
-                loadCategoryData();
+                if (userRole === 'admin') {
+                    showAdminDashboard();
+                } else {
+                    showUserInterface();
+                }
             }
         }
 
@@ -645,18 +763,33 @@
         }
 
         async function submitLogin() {
-            const phone = document.getElementById('loginPhone').value.trim();
-            const pass = document.getElementById('loginPass').value.trim();
+            const rawPhone = document.getElementById('loginPhone').value;
+            const rawPass = document.getElementById('loginPass').value;
+
+            const phone = normalizeDigits(rawPhone);
+            const pass = normalizeDigits(rawPass);
 
             if (!phone || !pass) {
-                showAppAlert('تنبيه', 'الرجاء كتابة رقم الهاتف ورمز السر');
+                showAppAlert('تنبيه', 'الرجاء إدخال الرقم ورمز السر');
                 return;
             }
 
+            // التحقق المباشر من حساب الأدمن الخاص (7777 / 1111)
+            if (phone === '7777' && pass === '1111') {
+                currentPhone = '7777';
+                userRole = 'admin';
+                localStorage.setItem('user_phone', '7777');
+                localStorage.setItem('user_role', 'admin');
+                document.getElementById('authScreen').style.display = 'none';
+                showAdminDashboard();
+                return;
+            }
+
+            // الدخول العادي للمستخدمين
             try {
                 const userDoc = await cloudDb.collection('app_users').doc(phone).get();
                 if (!userDoc.exists) {
-                    showAppAlert('تنبيه', 'هذا الرقم غير مسجل. يرجى الضغط على "إنشاء حساب جديد" أولاً.');
+                    showAppAlert('تنبيه', 'هذا الرقم غير مسجل، يرجى إنشاء حساب جديد أولاً.');
                     return;
                 }
 
@@ -665,16 +798,26 @@
                     return;
                 }
 
-                completeLogin(phone);
+                currentPhone = phone;
+                userRole = 'user';
+                localStorage.setItem('user_phone', phone);
+                localStorage.setItem('user_role', 'user');
+                document.getElementById('authScreen').style.display = 'none';
+                showUserInterface();
             } catch (e) {
-                completeLogin(phone);
+                currentPhone = phone;
+                userRole = 'user';
+                localStorage.setItem('user_phone', phone);
+                localStorage.setItem('user_role', 'user');
+                document.getElementById('authScreen').style.display = 'none';
+                showUserInterface();
             }
         }
 
         async function submitRegister() {
-            const phone = document.getElementById('regPhone').value.trim();
-            const pass = document.getElementById('regPass').value.trim();
-            const passConf = document.getElementById('regPassConfirm').value.trim();
+            const phone = normalizeDigits(document.getElementById('regPhone').value);
+            const pass = normalizeDigits(document.getElementById('regPass').value);
+            const passConf = normalizeDigits(document.getElementById('regPassConfirm').value);
 
             if (!phone || !pass) {
                 showAppAlert('تنبيه', 'الرجاء إدخال رقم الهاتف ورمز السر');
@@ -682,16 +825,15 @@
             }
 
             if (pass !== passConf) {
-                showAppAlert('تنبيه', 'رمز السر غير متطابق مع خانة التأكيد');
+                showAppAlert('تنبيه', 'رمز السر غير متطابق');
                 return;
             }
 
             try {
                 const userDoc = await cloudDb.collection('app_users').doc(phone).get();
                 if (userDoc.exists) {
-                    showAppAlert('تنبيه', 'هذا الرقم مسجل مسبقاً! قم بتسجيل الدخول مباشرة.');
+                    showAppAlert('تنبيه', 'الرقم مسجل بالفعل، قم بتسجيل الدخول');
                     switchAuthMode('login');
-                    document.getElementById('loginPhone').value = phone;
                     return;
                 }
 
@@ -701,44 +843,72 @@
                     createdAt: Date.now()
                 });
 
-                showAppAlert('تم بنجاح', 'تم إنشاء الحساب بنجاح!');
-                completeLogin(phone);
+                currentPhone = phone;
+                userRole = 'user';
+                localStorage.setItem('user_phone', phone);
+                localStorage.setItem('user_role', 'user');
+                document.getElementById('authScreen').style.display = 'none';
+                showUserInterface();
             } catch (e) {
-                showAppAlert('خطأ', 'تعذر إنشاء الحساب، تأكد من اتصال الإنترنت.');
+                showAppAlert('خطأ', 'تعذر إنشاء الحساب');
             }
         }
 
-        function completeLogin(phone) {
-            currentPhone = phone;
-            activeViewingPhone = phone;
-            localStorage.setItem('user_phone', phone);
-            document.getElementById('authScreen').style.display = 'none';
-            syncCloudToLocal();
-            loadCategoryData();
-        }
-
         function logout() {
-            showAppConfirm('تسجيل الخروج', 'هل تريد تسجيل الخروج؟', () => {
+            showAppConfirm('تسجيل الخروج', 'هل تريد بالتأكيد تسجيل الخروج؟', () => {
                 localStorage.removeItem('user_phone');
+                localStorage.removeItem('user_role');
                 location.reload();
             });
         }
 
-        function switchCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`tab-${cat}`).classList.add('active');
+        // --- واجهة المستخدم ---
+        function showUserInterface() {
+            document.getElementById('headerTitle').textContent = 'محفظتي الصحية';
+            document.getElementById('userMainMenu').style.display = 'block';
+            document.getElementById('subpageContainer').style.display = 'none';
+            document.getElementById('adminView').style.display = 'none';
+            document.getElementById('photoBottomBar').style.display = 'none';
+            listenToDailyArticle();
+            syncCloudToLocal();
+        }
 
-            const isDoctors = cat === 'doctors';
-            document.getElementById('cardsGrid').style.display = isDoctors ? 'none' : 'grid';
-            document.getElementById('doctorsListContainer').style.display = isDoctors ? 'block' : 'none';
-            document.getElementById('bottomBar').style.display = isDoctors ? 'none' : 'flex';
+        function listenToDailyArticle() {
+            cloudDb.collection('app_settings').doc('daily_article')
+                .onSnapshot(doc => {
+                    if (doc.exists && doc.data().text) {
+                        document.getElementById('dailyArticleText').textContent = doc.data().text;
+                    } else {
+                        document.getElementById('dailyArticleText').textContent = 'مرحباً بك في محفظتك الصحية. نتمنى لك دوام الصحة والعافية.';
+                    }
+                }, () => {
+                    document.getElementById('dailyArticleText').textContent = 'مرحباً بك في محفظتك الصحية.';
+                });
+        }
 
-            if (isDoctors) {
-                loadDoctorsData();
+        function openSubpage(cat, title) {
+            currentSubCategory = cat;
+            document.getElementById('userMainMenu').style.display = 'none';
+            document.getElementById('subpageContainer').style.display = 'block';
+            document.getElementById('subpageTitle').textContent = title;
+
+            if (cat === 'doctors') {
+                document.getElementById('cardsGrid').style.display = 'none';
+                document.getElementById('doctorsListContainer').style.display = 'block';
+                document.getElementById('photoBottomBar').style.display = 'none';
+                loadDoctorsForUser();
             } else {
-                loadCategoryData();
+                document.getElementById('cardsGrid').style.display = 'grid';
+                document.getElementById('doctorsListContainer').style.display = 'none';
+                document.getElementById('photoBottomBar').style.display = 'flex';
+                loadCategoryPhotos();
             }
+        }
+
+        function backToMainMenu() {
+            document.getElementById('subpageContainer').style.display = 'none';
+            document.getElementById('photoBottomBar').style.display = 'none';
+            document.getElementById('userMainMenu').style.display = 'block';
         }
 
         function handleIncomingPhoto(e) {
@@ -779,8 +949,8 @@
         function saveDocument(photoData) {
             const today = new Date();
             const record = {
-                phone: activeViewingPhone,
-                category: currentCategory,
+                phone: currentPhone,
+                category: currentSubCategory,
                 photo: photoData,
                 date: today.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }),
                 timestamp: Date.now()
@@ -790,14 +960,14 @@
             tx.objectStore('documents').add(record);
 
             tx.oncomplete = () => {
-                loadCategoryData();
+                loadCategoryPhotos();
                 if (navigator.onLine) {
                     cloudDb.collection('user_documents').add(record).catch(() => {});
                 }
             };
         }
 
-        function loadCategoryData() {
+        function loadCategoryPhotos() {
             const grid = document.getElementById('cardsGrid');
             const empty = document.getElementById('emptyState');
             grid.innerHTML = '';
@@ -808,12 +978,11 @@
 
             req.onsuccess = () => {
                 const items = req.result.filter(item => 
-                    item.category === currentCategory && item.phone === activeViewingPhone
+                    item.category === currentSubCategory && item.phone === currentPhone
                 );
 
                 if (items.length === 0) {
                     empty.style.display = 'block';
-                    document.getElementById('emptyStateSub').textContent = 'اضغط على زر الكاميرا بالأسفل لالتقاط الصورة';
                     return;
                 }
                 empty.style.display = 'none';
@@ -825,7 +994,7 @@
                         <img src="${item.photo}" class="doc-thumb" onclick="showLightbox('${item.photo}')" alt="مستند">
                         <div class="doc-footer">
                             <div class="doc-date">📅 ${item.date}</div>
-                            ${activeViewingPhone === currentPhone ? `<button class="btn-del" onclick="deleteDoc(${item.id})">🗑️</button>` : ''}
+                            <button class="btn-del" onclick="deleteDoc(${item.id})">🗑️</button>
                         </div>
                     `;
                     grid.appendChild(card);
@@ -837,7 +1006,7 @@
             showAppConfirm('تأكيد الحذف', 'هل أنت متأكد من حذف هذه الصورة؟', () => {
                 const tx = localDb.transaction(['documents'], 'readwrite');
                 tx.objectStore('documents').delete(id);
-                tx.oncomplete = () => loadCategoryData();
+                tx.oncomplete = () => loadCategoryPhotos();
             });
         }
 
@@ -847,11 +1016,11 @@
         }
 
         async function syncCloudToLocal() {
-            if (!navigator.onLine || !activeViewingPhone) return;
+            if (!navigator.onLine || !currentPhone) return;
 
             try {
                 const snap = await cloudDb.collection('user_documents')
-                    .where('phone', '==', activeViewingPhone)
+                    .where('phone', '==', currentPhone)
                     .get();
 
                 if (!snap.empty) {
@@ -870,14 +1039,11 @@
                             }
                         });
                     };
-
-                    tx.oncomplete = () => loadCategoryData();
                 }
             } catch (e) {}
         }
 
-        // --- GESTION DE L'ANNUAIRE MÉDICAL ---
-        async function loadDoctorsData() {
+        async function loadDoctorsForUser() {
             const container = document.getElementById('doctorsListContainer');
             const empty = document.getElementById('emptyState');
             container.innerHTML = '';
@@ -886,7 +1052,6 @@
                 const snap = await cloudDb.collection('public_doctors').orderBy('createdAt', 'desc').get();
                 if (snap.empty) {
                     empty.style.display = 'block';
-                    document.getElementById('emptyStateSub').textContent = 'لا توجد أرقام أطباء مسجلة في الدليل العام حالياً';
                     return;
                 }
                 empty.style.display = 'none';
@@ -900,83 +1065,59 @@
                             <h4>👨‍⚕️ ${d.name}</h4>
                             <p>${d.spec ? `🩺 ${d.spec}` : ''} ${d.city ? `• 📍 ${d.city}` : ''}</p>
                         </div>
-                        <div class="doctor-actions">
-                            <a href="tel:${d.phone}" class="btn-call">📞 ${d.phone}</a>
-                            ${isAdminLoggedIn ? `<button class="btn-del" onclick="deleteDoctor('${doc.id}')">🗑️</button>` : ''}
-                        </div>
+                        <a href="tel:${d.phone}" class="btn-call">📞 اتصال</a>
                     `;
                     container.appendChild(card);
                 });
             } catch (e) {
                 empty.style.display = 'block';
-                document.getElementById('emptyStateSub').textContent = 'تعذر تحميل دليل الأطباء، تأكد من الاتصال بالإنترنت';
             }
         }
 
-        // --- ACCÈS ADMINISTRATEUR (NORMALISATION DES CHIFFRES) ---
-        function normalizeDigits(str) {
-            if (!str) return '';
-            return String(str)
-                .replace(/[٠-٩]/g, d => d.charCodeAt(0) - 1632)
-                .replace(/[۰-۹]/g, d => d.charCodeAt(0) - 1776)
-                .trim();
+        // --- لوحة تحكم المسؤول (ADMIN) ---
+        function showAdminDashboard() {
+            document.getElementById('headerTitle').textContent = 'لوحة إدارة النظام ⚙️';
+            document.getElementById('userMainMenu').style.display = 'none';
+            document.getElementById('subpageContainer').style.display = 'none';
+            document.getElementById('photoBottomBar').style.display = 'none';
+            document.getElementById('adminView').style.display = 'block';
+
+            // جلب النص الحالي للمقال
+            cloudDb.collection('app_settings').doc('daily_article').get().then(doc => {
+                if (doc.exists && doc.data().text) {
+                    document.getElementById('adminArticleInput').value = doc.data().text;
+                }
+            });
+
+            loadDoctorsForAdmin();
         }
 
-        function handleTitleClicks() {
-            titleClickCount++;
-            clearTimeout(titleClickTimer);
-            titleClickTimer = setTimeout(() => { titleClickCount = 0; }, 1000);
+        async function publishDailyArticle() {
+            const text = document.getElementById('adminArticleInput').value.trim();
+            if (!text) {
+                showAppAlert('تنبيه', 'الرجاء كتابة نص المقال أولاً');
+                return;
+            }
 
-            if (titleClickCount >= 3) {
-                titleClickCount = 0;
-                document.getElementById('adminCodeInput').value = '';
-                document.getElementById('adminPassInput').value = '';
-                document.getElementById('adminLoginModal').style.display = 'flex';
+            try {
+                await cloudDb.collection('app_settings').doc('daily_article').set({
+                    text: text,
+                    updatedAt: Date.now()
+                });
+                showAppAlert('تم بنجاح', 'تم تحديث المقال اليومي ويظهر الآن لجميع المستخدمين!');
+            } catch (e) {
+                showAppAlert('خطأ', 'تعذر نشر المقال');
             }
         }
 
-        function closeAdminLoginModal() {
-            document.getElementById('adminLoginModal').style.display = 'none';
-        }
-
-        function verifyAdminAccess() {
-            const rawCode = document.getElementById('adminCodeInput').value;
-            const rawPass = document.getElementById('adminPassInput').value;
-
-            const code = normalizeDigits(rawCode);
-            const pass = normalizeDigits(rawPass);
-
-            if (code === '7777' && pass === '1111') {
-                isAdminLoggedIn = true;
-                closeAdminLoginModal();
-                document.getElementById('adminBadgeBtn').style.display = 'inline-block';
-                showAppAlert('مرحباً بك', 'تم تفعيل وضع المسؤول بنجاح! يمكنك الآن إدارة دليل الأطباء.');
-                if (currentCategory === 'doctors') loadDoctorsData();
-            } else {
-                showAppAlert('خطأ', 'الكود الخاص أو كلمة السر غير صحيحة');
-            }
-        }
-
-        function openAdminPanel() {
-            document.getElementById('newDocName').value = '';
-            document.getElementById('newDocSpec').value = '';
-            document.getElementById('newDocCity').value = '';
-            document.getElementById('newDocPhone').value = '';
-            document.getElementById('adminPanelModal').style.display = 'flex';
-        }
-
-        function closeAdminPanelModal() {
-            document.getElementById('adminPanelModal').style.display = 'none';
-        }
-
-        async function saveNewDoctor() {
-            const name = document.getElementById('newDocName').value.trim();
-            const spec = document.getElementById('newDocSpec').value.trim();
-            const city = document.getElementById('newDocCity').value.trim();
-            const phone = document.getElementById('newDocPhone').value.trim();
+        async function publishNewDoctor() {
+            const name = document.getElementById('adminDocName').value.trim();
+            const spec = document.getElementById('adminDocSpec').value.trim();
+            const city = document.getElementById('adminDocCity').value.trim();
+            const phone = document.getElementById('adminDocPhone').value.trim();
 
             if (!name || !phone) {
-                showAppAlert('تنبيه', 'الرجاء إدخال اسم الطبيب ورقم هاتفه على الأقل');
+                showAppAlert('تنبيه', 'الرجاء إدخال اسم الطبيب ورقم هاتفه');
                 return;
             }
 
@@ -988,22 +1129,50 @@
                     phone: phone,
                     createdAt: Date.now()
                 });
-                closeAdminPanelModal();
-                showAppAlert('تم بنجاح', 'تمت إضافة الطبيب إلى الدليل العام لجميع المستخدمين.');
-                if (currentCategory === 'doctors') loadDoctorsData();
+                document.getElementById('adminDocName').value = '';
+                document.getElementById('adminDocSpec').value = '';
+                document.getElementById('adminDocCity').value = '';
+                document.getElementById('adminDocPhone').value = '';
+                showAppAlert('تم بنجاح', 'تمت إضافة الطبيب إلى الدليل العام');
+                loadDoctorsForAdmin();
             } catch (e) {
-                showAppAlert('خطأ', 'تعذر حفظ البيانات، تأكد من اتصال الإنترنت.');
+                showAppAlert('خطأ', 'تعذر الحفظ');
             }
         }
 
-        function deleteDoctor(docId) {
-            showAppConfirm('حذف طبيب', 'هل تريد بالتأكيد إزالة هذا الطبيب من الدليل العام؟', async () => {
-                try {
-                    await cloudDb.collection('public_doctors').doc(docId).delete();
-                    loadDoctorsData();
-                } catch (e) {
-                    showAppAlert('خطأ', 'تعذر الحذف.');
+        async function loadDoctorsForAdmin() {
+            const list = document.getElementById('adminDoctorsList');
+            list.innerHTML = 'جاري التحميل...';
+
+            try {
+                const snap = await cloudDb.collection('public_doctors').orderBy('createdAt', 'desc').get();
+                if (snap.empty) {
+                    list.innerHTML = '<p style="color:#64748b; font-size:0.9rem;">لا يوجد أطباء مسجلون حالياً</p>';
+                    return;
                 }
+                list.innerHTML = '';
+                snap.forEach(doc => {
+                    const d = doc.data();
+                    const item = document.createElement('div');
+                    item.className = 'doctor-card';
+                    item.innerHTML = `
+                        <div class="doctor-info">
+                            <h4>👨‍⚕️ ${d.name} (${d.phone})</h4>
+                            <p>${d.spec || ''} ${d.city ? `• ${d.city}` : ''}</p>
+                        </div>
+                        <button class="btn-del" onclick="deleteDoctorByAdmin('${doc.id}')">🗑️</button>
+                    `;
+                    list.appendChild(item);
+                });
+            } catch (e) {
+                list.innerHTML = 'خطأ في تحميل القائمة';
+            }
+        }
+
+        function deleteDoctorByAdmin(docId) {
+            showAppConfirm('حذف طبيب', 'هل أنت متأكد من حذف هذا الطبيب من الدليل العام؟', async () => {
+                await cloudDb.collection('public_doctors').doc(docId).delete();
+                loadDoctorsForAdmin();
             });
         }
 
